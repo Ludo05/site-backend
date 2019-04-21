@@ -30,7 +30,7 @@ app.get("/find/:username", (req, res) => {
   });
 });
 
-app.post("/service/user", (req, res) => {
+app.post("/service/user/sigup", (req, res) => {
   const {username, password} = req.body;
 
   const {error} = Joi.validate(req.body, UserValidation);
@@ -55,6 +55,25 @@ app.post("/service/user", (req, res) => {
       .catch(() => res.sendStatus(404).send(error));
 });
 
+
+app.post("/service/user/sigin" , (req, res) => {
+  const {username, password} = req.body;
+
+  const {error} = Joi.validate(req.body, UserValidation);
+
+  if (error) {
+    res.status(404).send(error.details[0].message);
+    return;
+  }
+
+  User.findOne({ username: req.body.username}).then( user => {
+    if(user.password !== req.body.password) {
+        res.send('Passwords dont match')
+    } else {
+      res.send('You have logged in')
+    }
+  })
+})
   app.listen(9898, "localhost", () => {
     console.log("Connected");
   });
