@@ -4,6 +4,9 @@ import bodyParser from "body-parser";
 import { User } from "./src/models/User";
 import { STARTMONGO } from "./src/config/config";
 import Joi from "joi";
+import bcrypt from 'bcryptjs';
+
+
 import { UserValidation } from "./src/validation/UserValidation";
 
 STARTMONGO();
@@ -30,29 +33,31 @@ app.get("/find/:username", (req, res) => {
   });
 });
 
-app.post("/service/user/sigup", (req, res) => {
+app.post("/service/user/signup", (req, res) => {
   const {username, password} = req.body;
 
   const {error} = Joi.validate(req.body, UserValidation);
 
   if (error) {
-    res.status(404).send(error.details[0].message);
-    return;
+    res.status(404).send(error.details);
   }
+
+  //Hashes password
+  const hashedPassword = bcrypt.hashSync(password, 8);
+
 
   User.findOne({username: req.body.username}).then(user => {
     if (user) {
       res.status(400).send(" User already exists");
     } else {
+      res.status(200).send('Created');
 
       User.create({
         username: username,
-        password: password
-      })
+        password: hashedPassword
+      });
     }
-  })
-      .then(() => res.send('User Created'))
-      .catch(() => res.sendStatus(404).send(error));
+  }).catch((error) => res.sendStatus(404).send(error));
 });
 
 
