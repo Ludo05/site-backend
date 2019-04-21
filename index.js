@@ -22,13 +22,17 @@ app.get("/", (req, res) => {
   res.send("Change URL to use!");
 });
 
+app.get("/noresults", (req,res) => {
+  res.send('User isnot found')
+})
 app.get("/find/:username", (req, res) => {
   User.find({ username: req.params.username }).then(success => {
     if (success.length > 0) {
       res.send(success);
-      // res.redirect('/')
     } else {
-      res.send("No results found!");
+
+      // res.send("No results found!"); ADDED REDIRECT.
+       res.redirect('/noresults')
     }
   });
 });
