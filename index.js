@@ -33,7 +33,7 @@ app.get("/find/:username", (req, res) => {
     getUserValidation
   );
   if (error) {
-    res.status(422).send(error.message);
+    res.status(422).send(error.details[0].message);
   }
   User.find({ username: req.params.username }).then(success => {
     if (success.length > 0) {
@@ -45,7 +45,7 @@ app.get("/find/:username", (req, res) => {
   });
 });
 
-app.post("/service/user/signup", (req, res, next) => {
+app.post("/service/user/signup", (req, res) => {
   const { username, password } = req.body;
 
   const { error } = Joi.validate(req.body, UserValidation);
