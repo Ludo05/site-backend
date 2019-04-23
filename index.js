@@ -96,3 +96,5 @@ app.post("/service/user/sigin", (req, res) => {
 app.listen(9898, "localhost", () => {
   console.log("Connected");
 });
+
+// https://github.com/hapijs/joi/issues/779
