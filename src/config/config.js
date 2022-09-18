@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const CONFIG = 'mongodb://Lewis:Pluto!23@ds145346.mlab.com:45346/users';
+export const CONFIG = 'mongodb://';
 
 export const STARTMONGO = () => {
     return(
